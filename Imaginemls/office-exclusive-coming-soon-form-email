@@ -1,0 +1,40 @@
+// Email function written in JS that works with Google Forms to pull the most recent response and sent out an email
+function email() {
+
+  // Open a form by ID and log the responses to each question.
+  var form = FormApp.openById('1EsG_MGUUcLYG5OwpZPV6nni6Dim4yoVkZHtK6jb89Yk');
+  var formResponses = form.getResponses();
+  
+  // Get the latest response (which is the last one in the array)
+  var latestResponse = formResponses[formResponses.length - 1];
+  var itemResponses = latestResponse.getItemResponses();
+
+  // Assign variables for use in htmlBody
+  var listingBrokerEmail = itemResponses[2].getResponse();
+  var status = itemResponses[7].getResponse();
+  var agent = itemResponses[0].getResponse();
+  var listingAddress = itemResponses[5].getResponse();
+  var listingDate = itemResponses[6].getResponse();
+  
+  // Image URL for Imaginemls
+  var imageUrl = "https://lirp.cdn-website.com/694da87f/dms3rep/multi/opt/ImagineMLS-Horizontal-FullColor-WEB-241w.png";
+  
+  // Create an email message using the htmlBody for the MailApp Class
+  var htmlBody = `
+    <p><b>Hello!</b></p>
+    <p>A new ${status} listing form was submitted to MLS Staff by ${agent} in your office. Please review the information below at your earliest convenience.</p>
+    <p>We take your receival of this email as confirmation that you approve of this listing being a ${status}. Let us know if you have any questions about this.</p>
+    <p><b>Listing Address: </b>${listingAddress}</p>
+    <p><b>Date of Listing Agreement: </b>${listingDate}</p>
+    <br>
+    <p>Thank you for your participation in our MLS,</p>
+    <hr>
+    <p><img src="${imageUrl}" alt="Listing Image" style="max-width:100%; height:auto;"></p>`; // Embedding image in HTML body
+  
+  // Send out the email with a to email, subject, and body (no additional options included, although they are available in the MailApp Class)
+  MailApp.sendEmail({
+    to: listingBrokerEmail,
+    subject: 'New Coming-Soon/Office-Exclusive Submission',
+    htmlBody: htmlBody
+  });
+}
