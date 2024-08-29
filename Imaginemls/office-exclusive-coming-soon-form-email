@@ -2,7 +2,7 @@
 function email() {
 
   // Open a form by ID and log the responses to each question.
-  var form = FormApp.openById('1EsG_MGUUcLYG5OwpZPV6nni6Dim4yoVkZHtK6jb89Yk');
+  var form = FormApp.openById('1VBfRsqSQb4ZvVEbcZM7LRUpA8PAiAasxDLwQPHsQJqg');
   var formResponses = form.getResponses();
   
   // Get the latest response (which is the last one in the array)
@@ -10,11 +10,12 @@ function email() {
   var itemResponses = latestResponse.getItemResponses();
 
   // Assign variables for use in htmlBody
-  var listingBrokerEmail = itemResponses[2].getResponse();
-  var status = itemResponses[7].getResponse();
   var agent = itemResponses[0].getResponse();
-  var listingAddress = itemResponses[5].getResponse();
-  var listingDate = itemResponses[6].getResponse();
+  var listingAgentEmail = itemResponses[1].getResponse();
+  var listingBrokerEmail = itemResponses[2].getResponse();
+  var listingAddress = itemResponses[3].getResponse();
+  var listingDate = itemResponses[4].getResponse();
+  var status = itemResponses[5].getResponse();
   
   // Image URL for Imaginemls
   var imageUrl = "https://lirp.cdn-website.com/694da87f/dms3rep/multi/opt/ImagineMLS-Horizontal-FullColor-WEB-241w.png";
@@ -22,19 +23,44 @@ function email() {
   // Create an email message using the htmlBody for the MailApp Class
   var htmlBody = `
     <p><b>Hello!</b></p>
-    <p>A new ${status} listing form was submitted to MLS Staff by ${agent} in your office. Please review the information below at your earliest convenience.</p>
-    <p>We take your receival of this email as confirmation that you approve of this listing being a ${status}. Let us know if you have any questions about this.</p>
+    <p>A new ${status} listing was submitted to MLS Staff by your office. The information below is for your reference.</p>
+    <p>Let us know if you have any questions about this submission.</p>
+    <br>
+    <p><b>Listing Agent: </b>${agent}</p>
     <p><b>Listing Address: </b>${listingAddress}</p>
     <p><b>Date of Listing Agreement: </b>${listingDate}</p>
     <br>
+    <p>We've included the policy information below regarding Coming Soon and Office Exclusive Listings.</p>
+    <p><b>To Note for Coming Soon Listings</b></p>
+    <ul style="list-style-type: square">
+      <li>Coming Soon listings can remain in a Coming Soon status for a maximum of 14 days and cannot be shown until they are in an Active status on the MLS. The On Market Date in the input fields is the day when the listing will go from Coming Soon to Active (available for showings).</li>
+      <li>If for some reason you need to show the listing sooner than the On Market Date, you must change the status to Active. To change the status of the listing to Active follow these steps:
+        <ul style="list-style-type: circle">
+          <li>Log in to flexmls.com.</li>
+          <li>Click the Menu in the upper left hand corner.</li>
+          <li>Under Add/Change, select Change Listing.</li>
+          <li>Click on the Listing Number you want to change the status of.</li>
+          <li>Under Statuses, select Start Showing (Active) under statuses.</li>
+        </ul>
+      </li>
+    </ul>
+    <p><b>To Note for Office Exclusive Listings</b></p>
+    <ul style="list-style-type: square">
+      <li>Office Exclusives cannot be publicly marketed. If they are publicly marketed they must be entered in on Flexmls within one business day (this includes but is not limited to yard signs, social media posts, email blasts, etc).</li>
+      <li>If an Office Exclusive sells, the property should only be added to the MLS for comparable purposes after the closing (this helps to avoid any confusion among MLS participants regarding the availability of the listing).</li>
+    </ul>
+    <br>
+    <p>If you have any additional questions please visit our Clear Cooperation page on the Member Dashboard.</p>
+    <a href="https://www.bluegrassrealtors.com/member-dashboard/clearcooperation/">Clear Cooperation Link</a>
     <p>Thank you for your participation in our MLS,</p>
     <hr>
-    <p><img src="${imageUrl}" alt="Listing Image" style="max-width:100%; height:auto;"></p>`; // Embedding image in HTML body
+    <p><img src="${imageUrl}" alt="Listing Image" style="max-width:100%; height:auto;"></p>`;
   
   // Send out the email with a to email, subject, and body (no additional options included, although they are available in the MailApp Class)
   MailApp.sendEmail({
     to: listingBrokerEmail,
     subject: 'New Coming-Soon/Office-Exclusive Submission',
-    htmlBody: htmlBody
+    htmlBody: htmlBody,
+    cc: listingAgentEmail
   });
-}
+};
