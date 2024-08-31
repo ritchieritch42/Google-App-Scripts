@@ -12,10 +12,12 @@ function email() {
   // Assign variables for use in htmlBody
   var agent = itemResponses[0].getResponse();
   var listingAgentEmail = itemResponses[1].getResponse();
-  var listingBrokerEmail = itemResponses[2].getResponse();
-  var listingAddress = itemResponses[3].getResponse();
-  var listingDate = itemResponses[4].getResponse();
-  var status = itemResponses[5].getResponse();
+  var colistingAgent = itemResponses[2].getResponse();
+  var colistingAgentEmail = itemResponses[3].getResponse();
+  var listingBrokerEmail = itemResponses[4].getResponse();
+  var listingAddress = itemResponses[5].getResponse();
+  var listingDate = itemResponses[6].getResponse();
+  var status = itemResponses[7].getResponse();
   
   // Image URL for Imaginemls
   var imageUrl = "https://lirp.cdn-website.com/694da87f/dms3rep/multi/opt/ImagineMLS-Horizontal-FullColor-WEB-241w.png";
@@ -26,7 +28,7 @@ function email() {
     <p>A new ${status} listing was submitted to MLS Staff by your office. The information below is for your reference.</p>
     <p>Let us know if you have any questions about this submission.</p>
     <br>
-    <p><b>Listing Agent: </b>${agent}</p>
+    <p><b>Listing Agent(s): </b>${agent}, ${colistingAgent}</p>
     <p><b>Listing Address: </b>${listingAddress}</p>
     <p><b>Date of Listing Agreement: </b>${listingDate}</p>
     <br>
@@ -61,6 +63,6 @@ function email() {
     to: listingBrokerEmail,
     subject: 'New Coming-Soon/Office-Exclusive Submission',
     htmlBody: htmlBody,
-    cc: listingAgentEmail
+    cc: listingAgentEmail + ", " + colistingAgentEmail
   });
 };
